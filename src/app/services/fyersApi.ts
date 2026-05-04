@@ -16,9 +16,9 @@
  */
 
 // Replace these with your actual FYERS credentials
-export const FYERS_APP_ID = 'CDNRSGO621-100';
-export const FYERS_SECRET_KEY = 'TEY0L6CIVJ';
-const FYERS_BASE_URL = 'https://swing-weld.vercel.app/auth/callback';
+export const FYERS_APP_ID = 'YOUR_FYERS_APP_ID';
+export const FYERS_SECRET_KEY = 'YOUR_FYERS_SECRET_KEY';
+const FYERS_BASE_URL = 'https://api.fyers.in/api/v3';
 
 const simulateDelay = (ms = 300) => new Promise<void>(resolve => setTimeout(resolve, ms));
 
