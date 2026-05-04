@@ -1,5 +1,7 @@
+'use client';
+
 import { useState, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router';
+import { useRouter } from 'next/navigation';
 import { ScanLine, Filter, Zap, TrendingUp, TrendingDown, ChevronUp, ChevronDown, RefreshCw, Info, X } from 'lucide-react';
 import { stocks, type Stock } from '../data/mockData';
 import { SparklineChart } from '../components/SparklineChart';
@@ -8,7 +10,7 @@ import { motion, AnimatePresence } from 'motion/react';
 const riskColor = { Low: 'text-emerald-400 bg-emerald-500/10', Medium: 'text-amber-400 bg-amber-500/10', High: 'text-red-400 bg-red-500/10' };
 
 export function Scanner() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [filters, setFilters] = useState({
     sector: 'All', riskLevel: 'All', minRsi: 30, maxRsi: 80,
     minMomentum: 0, minAiConfidence: 0, minVolumeBreakout: 1.0, breakoutPattern: 'All',
@@ -269,7 +271,7 @@ export function Scanner() {
                 </div>
               </div>
               <div className="flex gap-2 items-center">
-                <button onClick={() => navigate(`/stock/${selectedStock.id}`)}
+                <button onClick={() => router.push(`/stock/${selectedStock.id}`)}
                   className="px-3 py-1.5 rounded-lg bg-violet-600 text-white hover:bg-violet-700 transition-colors" style={{ fontSize: '0.75rem' }}>
                   Full Analysis
                 </button>

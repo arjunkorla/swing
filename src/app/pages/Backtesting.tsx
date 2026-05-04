@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { FlaskConical, Play, TrendingUp, Target, BarChart3, Activity } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell } from 'recharts';

@@ -1,5 +1,7 @@
+'use client';
+
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router';
+import { useRouter } from 'next/navigation';
 import { TrendingUp, TrendingDown, Activity, ArrowUpRight, ArrowDownRight, Zap, BarChart3, Target, AlertCircle, RefreshCw } from 'lucide-react';
 import { AreaChart, Area, ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts';
 import { SparklineChart } from '../components/SparklineChart';
@@ -8,7 +10,7 @@ import { getMarketSentiment } from '../services/aiService';
 import { motion } from 'motion/react';
 
 export function Dashboard() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [sentiment, setSentiment] = useState<any>(null);
   const [liveIndices, setLiveIndices] = useState(indices);
   const [lastUpdate, setLastUpdate] = useState(new Date());
@@ -58,7 +60,7 @@ export function Dashboard() {
           <button onClick={() => setLiveIndices(indices)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700/50 text-slate-400 hover:text-slate-200 transition-colors" style={{ fontSize: '0.78rem' }}>
             <RefreshCw className="w-3.5 h-3.5" /> Refresh
           </button>
-          <button onClick={() => navigate('/scanner')} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-600 text-white hover:bg-violet-700 transition-colors" style={{ fontSize: '0.78rem' }}>
+          <button onClick={() => router.push('/scanner')} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-600 text-white hover:bg-violet-700 transition-colors" style={{ fontSize: '0.78rem' }}>
             <Zap className="w-3.5 h-3.5" /> AI Scanner
           </button>
         </div>
@@ -106,7 +108,7 @@ export function Dashboard() {
           </div>
           <div className="divide-y divide-[#1e2236]">
             {topGainers.map(s => (
-              <div key={s.id} onClick={() => navigate(`/stock/${s.id}`)}
+              <div key={s.id} onClick={() => router.push(`/stock/${s.id}`)}
                 className="flex items-center justify-between px-4 py-2.5 hover:bg-slate-800/30 cursor-pointer transition-colors">
                 <div>
                   <div className="text-slate-200" style={{ fontSize: '0.82rem', fontWeight: 500 }}>{s.id}</div>
@@ -130,7 +132,7 @@ export function Dashboard() {
         <div className="bg-[#111520] border border-[#1e2236] rounded-2xl p-4">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-slate-200" style={{ fontSize: '0.9rem', fontWeight: 600 }}>Sector Heatmap</h3>
-            <button onClick={() => navigate('/sector')} className="text-violet-400 hover:text-violet-300 transition-colors" style={{ fontSize: '0.72rem' }}>
+            <button onClick={() => router.push('/sector')} className="text-violet-400 hover:text-violet-300 transition-colors" style={{ fontSize: '0.72rem' }}>
               View All →
             </button>
           </div>
@@ -142,7 +144,7 @@ export function Dashboard() {
                   backgroundColor: sector.change > 0 ? `rgba(16,185,129,${Math.min(sector.change / 5, 0.25)})` : `rgba(239,68,68,${Math.min(Math.abs(sector.change) / 5, 0.25)})`,
                   borderColor: sector.change > 0 ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)',
                 }}
-                onClick={() => navigate('/sector')}
+                onClick={() => router.push('/sector')}
               >
                 <div className="text-slate-300" style={{ fontSize: '0.75rem', fontWeight: 600 }}>{sector.name}</div>
                 <div className={`${sector.change >= 0 ? 'text-emerald-400' : 'text-red-400'}`} style={{ fontSize: '0.8rem', fontWeight: 700 }}>
@@ -221,7 +223,7 @@ export function Dashboard() {
         <div className="bg-[#111520] border border-[#1e2236] rounded-2xl p-4">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-slate-200" style={{ fontSize: '0.9rem', fontWeight: 600 }}>Portfolio Snapshot</h3>
-            <button onClick={() => navigate('/portfolio')} className="text-violet-400" style={{ fontSize: '0.72rem' }}>View →</button>
+            <button onClick={() => router.push('/portfolio')} className="text-violet-400" style={{ fontSize: '0.72rem' }}>View →</button>
           </div>
           <div className="flex items-center gap-4 mb-4">
             <div className="w-24 h-24 flex-shrink-0">
@@ -260,11 +262,11 @@ export function Dashboard() {
               <Zap className="w-4 h-4 text-violet-400" />
               <h3 className="text-slate-200" style={{ fontSize: '0.9rem', fontWeight: 600 }}>AI Momentum Picks</h3>
             </div>
-            <button onClick={() => navigate('/scanner')} className="text-violet-400" style={{ fontSize: '0.72rem' }}>Scanner →</button>
+            <button onClick={() => router.push('/scanner')} className="text-violet-400" style={{ fontSize: '0.72rem' }}>Scanner →</button>
           </div>
           <div className="space-y-2">
             {stocks.filter(s => s.momentumScore >= 70).slice(0, 5).map(s => (
-              <div key={s.id} onClick={() => navigate(`/stock/${s.id}`)}
+              <div key={s.id} onClick={() => router.push(`/stock/${s.id}`)}
                 className="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-800/40 cursor-pointer transition-colors">
                 <div className="w-8 h-8 rounded-lg bg-violet-500/15 flex items-center justify-center flex-shrink-0">
                   <span className="text-violet-400" style={{ fontSize: '0.6rem', fontWeight: 700 }}>{s.aiConfidence}%</span>
@@ -293,7 +295,7 @@ export function Dashboard() {
               <AlertCircle className="w-4 h-4 text-amber-400" />
               <h3 className="text-slate-200" style={{ fontSize: '0.9rem', fontWeight: 600 }}>Recent Alerts</h3>
             </div>
-            <button onClick={() => navigate('/alerts')} className="text-violet-400" style={{ fontSize: '0.72rem' }}>All →</button>
+            <button onClick={() => router.push('/alerts')} className="text-violet-400" style={{ fontSize: '0.72rem' }}>All →</button>
           </div>
           <div className="space-y-2">
             {alertsData.slice(0, 4).map(alert => (

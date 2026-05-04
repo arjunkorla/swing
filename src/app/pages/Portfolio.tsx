@@ -1,5 +1,7 @@
+'use client';
+
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useRouter } from 'next/navigation';
 import { Briefcase, TrendingUp, TrendingDown, PieChart as PieIcon, AlertTriangle, Plus } from 'lucide-react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid } from 'recharts';
 import { portfolioHoldings, mtfPositions } from '../data/mockData';
@@ -15,7 +17,7 @@ const pnlHistory = [
 ];
 
 export function Portfolio() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<'holdings' | 'mtf'>('holdings');
 
   const totalInvested = portfolioHoldings.reduce((s, h) => s + h.investedValue, 0);
@@ -112,7 +114,7 @@ export function Portfolio() {
                 </thead>
                 <tbody className="divide-y divide-[#1a1d2e]">
                   {portfolioHoldings.map(h => (
-                    <tr key={h.symbol} onClick={() => navigate(`/stock/${h.symbol}`)}
+                    <tr key={h.symbol} onClick={() => router.push(`/stock/${h.symbol}`)}
                       className="hover:bg-slate-800/30 cursor-pointer transition-colors">
                       <td className="py-2.5 pr-3">
                         <div className="text-slate-200" style={{ fontSize: '0.82rem', fontWeight: 500 }}>{h.symbol}</div>

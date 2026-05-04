@@ -1,5 +1,7 @@
+'use client';
+
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useRouter } from 'next/navigation';
 import { TrendingUp, Zap, Target, Clock, Shield, ChevronRight, Filter } from 'lucide-react';
 import { swingOpportunities } from '../data/mockData';
 import { motion } from 'motion/react';
@@ -16,7 +18,7 @@ const typeColors: Record<string, string> = {
 const tagColor = 'bg-slate-800/60 text-slate-500 border-slate-700/50';
 
 export function SwingOpportunities() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [filter, setFilter] = useState('All');
   const types = ['All', 'Breakout', 'Momentum', 'Dip Recovery', 'Sector Rotation', 'Breakout Retest'];
 
@@ -138,7 +140,7 @@ export function SwingOpportunities() {
 
               {/* Action Button */}
               <button
-                onClick={() => navigate(`/stock/${opp.symbol}`)}
+                onClick={() => router.push(`/stock/${opp.symbol}`)}
                 className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl bg-violet-500/10 border border-violet-500/20 text-violet-300 hover:bg-violet-500/20 group-hover:border-violet-500/40 transition-all"
                 style={{ fontSize: '0.78rem', fontWeight: 500 }}
               >

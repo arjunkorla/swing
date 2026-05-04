@@ -3,6 +3,9 @@
 @import './theme.css';
 
 /* AI Swing Trading Platform - Global Styles */
+html, body { height: 100%; margin: 0; }
+#root, #__next { height: 100%; }
+
 * {
   scrollbar-width: thin;
   scrollbar-color: #1e2236 transparent;

@@ -1,10 +1,9 @@
-import { useEffect } from 'react';
-import { RouterProvider } from 'react-router';
-import { router } from './routes';
+'use client';
 
-export default function App() {
+import { useEffect } from 'react';
+
+export function ThemeInit() {
   useEffect(() => {
-    // Set dark mode by default
     const savedTheme = localStorage.getItem('theme') || 'dark';
     document.documentElement.classList.toggle('dark', savedTheme === 'dark');
     document.body.style.backgroundColor = savedTheme === 'dark' ? '#0b0d18' : '#f1f5f9';
@@ -12,5 +11,5 @@ export default function App() {
     document.body.style.padding = '0';
   }, []);
 
-  return <RouterProvider router={router} />;
+  return null;
 }

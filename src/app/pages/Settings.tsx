@@ -1,4 +1,6 @@
-import { useState } from 'react';
+'use client';
+
+import { useState, useEffect } from 'react';
 import { Settings as SettingsIcon, User, Shield, Bell, Sliders, Link2, Moon, Sun, Save, Check } from 'lucide-react';
 import { FYERS_APP_ID } from '../services/fyersApi';
 import { motion } from 'motion/react';
@@ -14,17 +16,26 @@ const tabs: { key: TabKey; label: string; icon: any }[] = [
   { key: 'theme', label: 'Theme', icon: Moon },
 ];
 
+const DEFAULT_USER = { name: 'Rahul Sharma', email: 'rahul@example.com' };
+
 export function Settings() {
   const [activeTab, setActiveTab] = useState<TabKey>('profile');
   const [saved, setSaved] = useState(false);
-  const user = JSON.parse(localStorage.getItem('user') || '{"name":"Rahul Sharma","email":"rahul@example.com"}');
+  const [user, setUser] = useState(DEFAULT_USER);
 
-  const [profile, setProfile] = useState({ name: user.name, email: user.email, phone: '+91 98765 43210', plan: 'Pro' });
+  const [profile, setProfile] = useState({ name: DEFAULT_USER.name, email: DEFAULT_USER.email, phone: '+91 98765 43210', plan: 'Pro' });
   const [risk, setRisk] = useState({ profile: 'Moderate', maxRiskPerTrade: 2, maxDailyLoss: 5, maxPortfolioRisk: 15, mtfAllowed: true, maxLeverage: 4 });
   const [scanner, setScanner] = useState({ minScore: 65, minConfidence: 70, minVolumeBreakout: 1.2, maxRisk: 'Medium', preferredSectors: ['Banking', 'Auto', 'Pharma'], refreshInterval: 5 });
   const [broker, setBroker] = useState({ connected: true, appId: FYERS_APP_ID, name: 'FYERS', lastSync: '2 min ago' });
   const [alertPrefs, setAlertPrefs] = useState({ app: true, telegram: true, email: true, whatsapp: false, telegramId: '@swingai_alerts', volumeAlert: true, priceAlert: true, aiAlert: true });
-  const [theme, setTheme] = useState({ mode: localStorage.getItem('theme') || 'dark', accent: 'violet', fontSize: 'default', compactMode: false });
+  const [theme, setTheme] = useState({ mode: 'dark', accent: 'violet', fontSize: 'default', compactMode: false });
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem('user') || JSON.stringify(DEFAULT_USER));
+    setUser(storedUser);
+    setProfile(p => ({ ...p, name: storedUser.name, email: storedUser.email }));
+    setTheme(t => ({ ...t, mode: localStorage.getItem('theme') || 'dark' }));
+  }, []);
 
   const handleSave = () => {
     localStorage.setItem('user', JSON.stringify({ ...user, name: profile.name, email: profile.email }));

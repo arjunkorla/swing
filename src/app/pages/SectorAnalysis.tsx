@@ -1,5 +1,7 @@
+'use client';
+
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useRouter } from 'next/navigation';
 import { BarChart3, TrendingUp, TrendingDown, Zap } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, RadarChart, Radar, PolarGrid, PolarAngleAxis } from 'recharts';
 import { sectorData, stocks } from '../data/mockData';
@@ -19,7 +21,7 @@ const radarData = sectorData.map(s => ({
 }));
 
 export function SectorAnalysis() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [selectedSector, setSelectedSector] = useState(sectorData[0]);
   const [view, setView] = useState<'bar' | 'table'>('bar');
 
@@ -148,7 +150,7 @@ export function SectorAnalysis() {
             <div className="space-y-1.5">
               <div className="text-slate-500 mb-2" style={{ fontSize: '0.72rem', fontWeight: 600 }}>Top Stocks</div>
               {sectorStocks.slice(0, 3).map(s => (
-                <div key={s.id} onClick={() => navigate(`/stock/${s.id}`)}
+                <div key={s.id} onClick={() => router.push(`/stock/${s.id}`)}
                   className="flex items-center justify-between p-2 rounded-lg hover:bg-slate-800/40 cursor-pointer transition-colors">
                   <div>
                     <span className="text-slate-300" style={{ fontSize: '0.78rem', fontWeight: 500 }}>{s.id}</span>

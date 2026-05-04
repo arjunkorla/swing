@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useRef, useEffect } from 'react';
 import { Bot, X, Send, Mic, ChevronDown, Sparkles, User, RefreshCw } from 'lucide-react';
 import { sendChatMessage, type ChatMessage } from '../services/aiService';

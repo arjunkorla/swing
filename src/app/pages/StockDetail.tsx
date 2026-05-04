@@ -1,5 +1,7 @@
+'use client';
+
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router';
+import { useRouter } from 'next/navigation';
 import { ArrowLeft, TrendingUp, TrendingDown, Plus, Minus, Star, Bell, Share2, Zap, Target, Shield, Activity, BarChart3 } from 'lucide-react';
 import { ComposedChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
 import { stocks } from '../data/mockData';
@@ -20,9 +22,8 @@ const CustomTooltip = ({ active, payload }: any) => {
   );
 };
 
-export function StockDetail() {
-  const { symbol } = useParams<{ symbol: string }>();
-  const navigate = useNavigate();
+export function StockDetail({ symbol }: { symbol: string }) {
+  const router = useRouter();
   const [chartData, setChartData] = useState<any[]>([]);
   const [analysis, setAnalysis] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -53,7 +54,7 @@ export function StockDetail() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <button onClick={() => navigate(-1)} className="p-2 rounded-xl bg-slate-800/60 border border-slate-700/50 text-slate-400 hover:text-slate-200 transition-colors">
+          <button onClick={() => router.back()} className="p-2 rounded-xl bg-slate-800/60 border border-slate-700/50 text-slate-400 hover:text-slate-200 transition-colors">
             <ArrowLeft className="w-4 h-4" />
           </button>
           <div>

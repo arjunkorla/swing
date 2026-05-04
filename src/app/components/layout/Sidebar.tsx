@@ -1,4 +1,7 @@
-import { NavLink, useLocation } from 'react-router';
+'use client';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard, ScanLine, Zap, Star, Briefcase, TrendingUp,
   BarChart3, Bell, FlaskConical, BookOpen, Settings, ChevronLeft,
@@ -25,7 +28,7 @@ interface SidebarProps {
 }
 
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
-  const location = useLocation();
+  const pathname = usePathname();
 
   return (
     <aside
@@ -57,7 +60,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           </div>
         )}
         {navItems.filter(i => i.group === 'main').map(item => (
-          <SidebarItem key={item.path} item={item} collapsed={collapsed} active={location.pathname === (item.matchPath || item.path)} />
+          <SidebarItem key={item.path} item={item} collapsed={collapsed} active={pathname === (item.matchPath || item.path)} />
         ))}
 
         {!collapsed && (
@@ -67,7 +70,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         )}
         {collapsed && <div className="h-2" />}
         {navItems.filter(i => i.group === 'analysis').map(item => (
-          <SidebarItem key={item.path} item={item} collapsed={collapsed} active={location.pathname === item.path} />
+          <SidebarItem key={item.path} item={item} collapsed={collapsed} active={pathname === item.path} />
         ))}
 
         {!collapsed && (
@@ -77,14 +80,14 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         )}
         {collapsed && <div className="h-2" />}
         {navItems.filter(i => i.group === 'tools').map(item => (
-          <SidebarItem key={item.path} item={item} collapsed={collapsed} active={location.pathname === item.path} />
+          <SidebarItem key={item.path} item={item} collapsed={collapsed} active={pathname === item.path} />
         ))}
       </nav>
 
       {/* Bottom section */}
       <div className="border-t border-[#1a1d2e] p-2 space-y-0.5">
         {navItems.filter(i => i.group === 'account').map(item => (
-          <SidebarItem key={item.path} item={item} collapsed={collapsed} active={location.pathname === item.path} />
+          <SidebarItem key={item.path} item={item} collapsed={collapsed} active={pathname === item.path} />
         ))}
 
         {/* Collapse Toggle */}
@@ -121,8 +124,8 @@ function SidebarItem({
 }) {
   const Icon = item.icon;
   return (
-    <NavLink
-      to={item.path}
+    <Link
+      href={item.path}
       title={collapsed ? item.label : undefined}
       className={`flex items-center gap-2.5 px-2 py-2 rounded-lg transition-all duration-150 relative group
         ${active
@@ -151,6 +154,6 @@ function SidebarItem({
           {item.label}
         </div>
       )}
-    </NavLink>
+    </Link>
   );
 }

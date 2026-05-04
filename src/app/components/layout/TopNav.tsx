@@ -1,5 +1,7 @@
+'use client';
+
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router';
+import { useRouter } from 'next/navigation';
 import { Search, Bell, Bot, User, ChevronDown, Sun, Moon, Wifi, WifiOff, X, TrendingUp, TrendingDown } from 'lucide-react';
 import { searchStocks } from '../../services/fyersApi';
 
@@ -9,8 +11,10 @@ interface TopNavProps {
   onThemeToggle: () => void;
 }
 
+const DEFAULT_USER = { name: 'Rahul Sharma', email: 'rahul@example.com' };
+
 export function TopNav({ onAIToggle, theme, onThemeToggle }: TopNavProps) {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -20,7 +24,11 @@ export function TopNav({ onAIToggle, theme, onThemeToggle }: TopNavProps) {
   const [connected, setConnected] = useState(true);
   const searchRef = useRef<HTMLDivElement>(null);
 
-  const user = JSON.parse(localStorage.getItem('user') || '{"name":"Rahul Sharma","email":"rahul@example.com"}');
+  const [user, setUser] = useState(DEFAULT_USER);
+
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem('user') || JSON.stringify(DEFAULT_USER)));
+  }, []);
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -46,7 +54,7 @@ export function TopNav({ onAIToggle, theme, onThemeToggle }: TopNavProps) {
   const handleLogout = () => {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user');
-    navigate('/login');
+    router.push('/login');
   };
 
   // Live market ticker
@@ -128,7 +136,7 @@ export function TopNav({ onAIToggle, theme, onThemeToggle }: TopNavProps) {
                   <div className="p-3">
                     <div className="text-slate-500 mb-2" style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Popular</div>
                     {['RELIANCE', 'TCS', 'HDFCBANK', 'TATAMOTORS', 'INFY'].map(s => (
-                      <button key={s} onClick={() => { navigate(`/stock/${s}`); setShowSearch(false); }}
+                      <button key={s} onClick={() => { router.push(`/stock/${s}`); setShowSearch(false); }}
                         className="w-full text-left px-2 py-1.5 rounded hover:bg-slate-800 text-slate-300" style={{ fontSize: '0.8rem' }}>
                         NSE:{s}
                       </button>
@@ -136,7 +144,7 @@ export function TopNav({ onAIToggle, theme, onThemeToggle }: TopNavProps) {
                   </div>
                 )}
                 {searchResults.map(r => (
-                  <button key={r.symbol} onClick={() => { navigate(`/stock/${r.symbol.split(':')[1]?.split('-')[0] || r.symbol}`); setShowSearch(false); setSearchQuery(''); }}
+                  <button key={r.symbol} onClick={() => { router.push(`/stock/${r.symbol.split(':')[1]?.split('-')[0] || r.symbol}`); setShowSearch(false); setSearchQuery(''); }}
                     className="w-full text-left px-3 py-2.5 hover:bg-slate-800 border-b border-slate-800/50 flex items-center justify-between">
                     <div>
                       <div className="text-slate-200" style={{ fontSize: '0.82rem', fontWeight: 500 }}>{r.name}</div>
@@ -170,7 +178,7 @@ export function TopNav({ onAIToggle, theme, onThemeToggle }: TopNavProps) {
         </button>
 
         {/* Notifications */}
-        <button onClick={() => { setNotifications(0); navigate('/alerts'); }}
+        <button onClick={() => { setNotifications(0); router.push('/alerts'); }}
           className="relative p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-colors">
           <Bell className="w-4 h-4" />
           {notifications > 0 && (
@@ -198,7 +206,7 @@ export function TopNav({ onAIToggle, theme, onThemeToggle }: TopNavProps) {
                 <div className="text-slate-500" style={{ fontSize: '0.72rem' }}>{user.email}</div>
               </div>
               <div className="p-1">
-                <button onClick={() => { navigate('/settings'); setShowProfile(false); }}
+                <button onClick={() => { router.push('/settings'); setShowProfile(false); }}
                   className="w-full text-left px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 transition-colors" style={{ fontSize: '0.82rem' }}>
                   Settings
                 </button>

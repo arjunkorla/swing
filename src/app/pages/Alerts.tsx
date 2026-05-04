@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { Bell, Plus, X, Volume2, TrendingUp, Activity, Target, Zap, BarChart3, CheckCircle, Clock } from 'lucide-react';
 import { alertsData } from '../data/mockData';

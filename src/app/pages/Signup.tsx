@@ -1,10 +1,13 @@
+'use client';
+
 import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Activity, Eye, EyeOff, User, Mail, Lock, ArrowRight, Check } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export function Signup() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [form, setForm] = useState({ name: '', email: '', password: '', confirmPassword: '' });
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -27,7 +30,7 @@ export function Signup() {
     await new Promise(r => setTimeout(r, 1200));
     localStorage.setItem('auth_token', `mock_jwt_${Date.now()}`);
     localStorage.setItem('user', JSON.stringify({ name: form.name, email: form.email, plan: 'Free Trial' }));
-    navigate('/dashboard');
+    router.push('/dashboard');
     setLoading(false);
   };
 
@@ -154,7 +157,7 @@ export function Signup() {
 
         <p className="text-center text-slate-500 mt-6" style={{ fontSize: '0.82rem' }}>
           Already have an account?{' '}
-          <Link to="/login" className="text-violet-400 hover:text-violet-300">Sign in</Link>
+          <Link href="/login" className="text-violet-400 hover:text-violet-300">Sign in</Link>
         </p>
       </motion.div>
     </div>

@@ -1,10 +1,13 @@
+'use client';
+
 import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Activity, Eye, EyeOff, Lock, Mail, ArrowRight, Zap, Shield, TrendingUp } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export function Login() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [email, setEmail] = useState('demo@swingai.in');
   const [password, setPassword] = useState('Demo@1234');
   const [showPassword, setShowPassword] = useState(false);
@@ -14,8 +17,8 @@ export function Login() {
   useEffect(() => {
     document.documentElement.classList.add('dark');
     document.body.style.backgroundColor = '#0b0d18';
-    if (localStorage.getItem('auth_token')) navigate('/dashboard');
-  }, [navigate]);
+    if (localStorage.getItem('auth_token')) router.push('/dashboard');
+  }, [router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,7 +31,7 @@ export function Login() {
     if (password.length >= 6) {
       localStorage.setItem('auth_token', `mock_jwt_${Date.now()}`);
       localStorage.setItem('user', JSON.stringify({ name: 'Rahul Sharma', email, plan: 'Pro' }));
-      navigate('/dashboard');
+      router.push('/dashboard');
     } else {
       setError('Invalid credentials. Use demo@swingai.in / Demo@1234');
     }
@@ -41,7 +44,7 @@ export function Login() {
     // Real FYERS OAuth: window.location.href = getAuthUrl();
     localStorage.setItem('auth_token', `fyers_mock_jwt_${Date.now()}`);
     localStorage.setItem('user', JSON.stringify({ name: 'FYERS User', email: 'fyers@broker.in', plan: 'Pro', broker: 'FYERS' }));
-    navigate('/dashboard');
+    router.push('/dashboard');
     setLoading(false);
   };
 
@@ -216,7 +219,7 @@ export function Login() {
 
           <p className="text-center text-slate-500 mt-6" style={{ fontSize: '0.82rem' }}>
             Don't have an account?{' '}
-            <Link to="/signup" className="text-violet-400 hover:text-violet-300 transition-colors">
+            <Link href="/signup" className="text-violet-400 hover:text-violet-300 transition-colors">
               Create free account
             </Link>
           </p>

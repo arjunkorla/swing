@@ -1,31 +1,35 @@
-import { useState, useEffect } from 'react';
-import { Outlet, Navigate } from 'react-router';
-import { Sidebar } from './Sidebar';
-import { TopNav } from './TopNav';
-import { AIAssistant } from '../AIAssistant';
+'use client';
 
-export function Layout() {
+import { useState, useEffect, type ReactNode } from 'react';
+import { useRouter } from 'next/navigation';
+import { Sidebar } from '../components/layout/Sidebar';
+import { TopNav } from '../components/layout/TopNav';
+import { AIAssistant } from '../components/AIAssistant';
+
+export default function AppLayout({ children }: { children: ReactNode }) {
+  const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+  const [authorized, setAuthorized] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [aiOpen, setAiOpen] = useState(false);
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
 
-  const isAuthenticated = !!localStorage.getItem('auth_token');
-
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') as 'dark' | 'light' || 'dark';
+    if (!localStorage.getItem('auth_token')) {
+      router.replace('/login');
+      setMounted(true);
+      return;
+    }
+    setAuthorized(true);
+    const savedTheme = (localStorage.getItem('theme') as 'dark' | 'light') || 'dark';
     setTheme(savedTheme);
     document.documentElement.classList.toggle('dark', savedTheme === 'dark');
     document.documentElement.classList.toggle('light', savedTheme === 'light');
-    if (savedTheme === 'dark') {
-      document.body.style.backgroundColor = '#0b0d18';
-    } else {
-      document.body.style.backgroundColor = '#f1f5f9';
-    }
-  }, []);
+    document.body.style.backgroundColor = savedTheme === 'dark' ? '#0b0d18' : '#f1f5f9';
+    setMounted(true);
+  }, [router]);
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
+  if (!mounted || !authorized) return null;
 
   const handleThemeToggle = () => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';
@@ -43,11 +47,11 @@ export function Layout() {
 
       {/* Main Content */}
       <main
-        className={`transition-all duration-300 pt-14 min-h-screen`}
+        className="transition-all duration-300 pt-14 min-h-screen"
         style={{ marginLeft: sidebarCollapsed ? '64px' : '224px' }}
       >
         <div className="p-5">
-          <Outlet />
+          {children}
         </div>
       </main>
 

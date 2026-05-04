@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { BookOpen, Plus, Star, TrendingUp, TrendingDown, Zap, X, Upload } from 'lucide-react';
 import { journalEntries } from '../data/mockData';
